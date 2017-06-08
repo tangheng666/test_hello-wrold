@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssd.mapper.Ssd_tradelogMapper">
+   
+    <sql id="orderquery_where">
+       <where>
+			<if test="title!=null">
+				and title  like #{title}"%"
+			</if>
+			 <if test="user_id!=null">
+		       and user_id=#{user_id} 
+		    </if>
+		    <if test="state!=null">
+		       and state=#{state}
+		    </if>
+
+		</where>
+    
+    </sql>
+
+
+	<!--添加订单记录 -->
+	<insert id="add_Ssd_order" parameterType="ssd_tradelog">
+		INSERT INTO
+		`Suishendi`.`ssd_tradelog`
+		(`user_id`,
+		`order_id`,
+		`state`,
+		`commit_date`,
+		`complete_date`,
+		`field_id`,
+		`title`,
+		`type`,
+		`area`,
+		`price`,
+		`province`,
+		`urban_area`,
+		`detailed_address`,
+		`deadline`,
+		`distinguish`)
+		VALUES
+		(#{user_id},
+		#{order_id},
+		#{state},
+		#{commit_date},
+		#{complete_date},
+		#{field_id},
+		#{title},
+		#{type },
+		#{area},
+		#{price},
+		#{province},
+		#{urban_area},
+		#{detailed_address},
+		#{deadline},
+		#{distinguish})
+	</insert>
+
+	<update id="update_Ssd_order" parameterType="ssd_tradelog">
+		UPDATE Suishendi.ssd_tradelog
+		<set>
+			<if test="state!=null">
+				state=#{state},
+			</if>
+			<if test="commit_date!=null">
+				commit_date=#{commit_date},
+			</if>
+			<if test="complete_date!=null">
+				complete_date=#{complete_date},
+			</if>
+			<if test="field_id!=null">
+				field_id=#{field_id},
+			</if>
+			<if test="title!=null">
+				title=#{title},
+			</if>
+			<if test="type!=null">
+				type=#{type},
+			</if>
+			<if test="area!=null">
+				area=#{area},
+			</if>
+			<if test="price!=null">
+				price=#{price},
+			</if>
+			<if test="province!=null">
+				province=#{province},
+			</if>
+			<if test="urban_area!=null">
+				urban_area=#{urban_area},
+			</if>
+			<if test="detailed_address!=null">
+				detailed_address=#{detailed_address},
+			</if>
+		</set>
+		 
+			 
+				where  order_id=#{order_id}    
+		 
+	 
+	</update>
+
+	<delete id="delete_Ssd_order">
+		delete from ssd_tradelog where order_id =#{orderid} 
+	</delete>
+	<!--查询记录数 -->
+	<select id="Get_OrderinfoCount" resultType="_int" parameterType="ssd_tradelog">
+
+		select count(1) from Suishendi.ssd_tradelog  
+		<include refid="orderquery_where"/>
+		
+	</select>
+    
+    <select id="Get_orderidOrderInfo" parameterType="String" resultType="ssd_tradelog">
+        	select * from Suishendi.ssd_tradelog where order_id=#{orderid}
+    </select>
+	<select id="Get_useridOrderInfo" parameterType="map"
+		resultType="ssd_tradelog">
+		select * from Suishendi.ssd_tradelog 
+		<where>
+		    <if test="userid!=null">
+		       and user_id=#{userid} 
+		    </if>
+		    <if test="state!=null">
+		       and state=#{state}
+		    </if>
+		</where>
+
+	</select>
+	 
+	
+	<select id="get_page_orderinfo" parameterType="ssd_tradelog" resultType="ssd_tradelog" >
+	   <bind name="pageindexs" value="(_parameter.pageSupport.pageIndex-1)*_parameter.pageSupport.pageSize"/>
+	   select * from Suishendi.ssd_tradelog 
+	     <include refid="orderquery_where"/>
+	     order by order_id asc
+	     LIMIT #{pageindexs},#{_parameter.pageSupport.pageSize}
+	   
+	
+	</select>
+
+
+
+
+
+</mapper>

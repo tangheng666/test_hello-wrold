@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssd.mapper.Ssd_userMapper">
+
+	<!-- 写一个公共sql语句块 -->
+	<sql id="userquery_where">
+		<where>
+			<if test="_parameter.username!=null">
+				and username like "%"#{username}"%"
+			</if>
+
+		</where>
+	</sql>
+
+	<select id="GetUser_count" resultType="_int" parameterType="ssd_user">
+		select count(1) from ssd_user
+		<include refid="userquery_where" />
+
+
+	</select>
+	<insert id="add_user" parameterType="ssd_user">
+		INSERT INTO
+		`Suishendi`.`ssd_user`
+		(`userid`,
+		`username`,
+		`password`,
+		`address1`,
+		`phone`,
+		`telephone`,
+		`createdate`,
+		`lastlogindate`,
+		`lastmodifydate`,
+		`identity_card`,
+		`icon`,
+		`sex`,
+		`birthday`,
+		`email`,
+		`usertype`,
+		`rank`,
+		`integral`,
+		`allergy_his`,
+		`address2`)
+		VALUES
+		(#{userid},
+		#{username},
+		#{password},
+		#{address1},
+		#{phone},
+		#{telephone},
+		#{createdate},
+		#{lastlogindate},
+		#{lastmodifydate},
+		#{identity_card},
+		#{icon},
+		#{sex},
+		#{birthday},
+		#{email},
+		#{usertype},
+		#{rank},
+		#{integral},
+		#{allergy_his},
+		#{address2 });
+
+
+
+
+	</insert>
+
+
+	<!-- <sql id="grade_where"> <where> <if test="grade_name !=null"> and grade_name 
+		like '%${_parameter.grade_name}%' </if> </where> </sql> <select id="getAllGrades" 
+		parameterType="gradeAlias" resultType="gradeAlias" > <bind name="pageindexs" 
+		value="(_parameter.page.pageIndex-1)*_parameter.page.pageSize"/> SELECT * 
+		FROM grade <include refid="grade_where"></include> ORDER BY grade_id LIMIT 
+		#{pageindexs},#{_parameter.page.pageSize} </select> <select id="GetGradeCount" 
+		parameterType="gradeAlias" resultType="_int"> select count(1) from grade 
+		<include refid="grade_where"></include> </select> -->
+	<select id="GetPageUser" parameterType="ssd_user" resultType="ssd_user">
+		<bind name="pageindexs"
+			value="(_parameter.pageSupport.pageIndex-1)*_parameter.pageSupport.pageSize" />
+		select * from ssd_user
+		<include refid="userquery_where" />
+
+		<choose>
+			<when test="_parameter.lastlogindate!=null">
+				order by lastlogindate asc
+			</when>
+			<otherwise>
+				order by userid asc
+			</otherwise>
+		</choose>
+		LIMIT #{pageindexs},#{_parameter.pageSupport.pageSize}
+	</select>
+
+
+	<!--用户通过用户编号查询用户信息 -->
+	<select id="get_User" parameterType="String" resultType="ssd_user">
+		select *
+		from ssd_user where userid =#{id}
+	</select>
+	<!--修改用户信息 -->
+	<update id="update_user" parameterType="ssd_user">
+		update ssd_user
+		<set>
+			<if test="username!=null">
+				username=#{username},
+			</if>
+			<if test="address1!=null">
+				address1=#{address1},
+			</if>
+			<if test="address2!=null">
+				address2=#{address2},
+			</if>
+			<if test="icon!=null">
+				icon=#{icon},
+			</if>
+			<if test="email!=null">
+				email=#{email},
+			</if>
+			<if test="identity_card!=null">
+				identity_card=#{identity_card},
+			</if>
+			<if test="birthday!=null">
+				birthday=#{birthday},
+			</if>
+			<if test="lastlogindate!=null">
+				lastlogindate=#{lastlogindate},
+			</if>
+			<if test="lastmodifydate!=null">
+				lastmodifydate=#{lastmodifydate},
+			</if>
+			<if test="password!=null">
+				password=#{password},
+			</if>
+			<if test="phone!=null">
+				phone=#{phone},
+			</if>
+			<if test="rank!=null">
+				rank=#{rank},
+			</if>
+			<if test="sex!=null">
+				sex=#{sex},
+			</if>
+			<if test="telephone!=null">
+				telephone=#{telephone},
+			</if>
+			<if test="usertype!=null">
+				usertype=#{usertype},
+			</if>
+			<if test="integral!=null">
+				integral=#{integral},
+			</if>
+			<if test="allergy_his!=null">
+				allergy_his=#{allergy_his},
+			</if>
+		</set>
+		<where>
+			userid=#{userid}
+		</where>
+	</update>
+	<!-- 删除用户信息 -->
+	<delete id="delete_user" parameterType="String">
+		delete from ssd_user
+		where userid=#{id}
+	</delete>
+	<!-- 用户实现登录的方法 -->
+	<select id="user_login" parameterType="ssd_user" resultType="ssd_user">
+		select * from ssd_user
+		<where>
+			and userid=#{userid} and password=#{password}
+		</where>
+	</select>
+
+	<select id="query_useruserid_isexists" parameterType="String"
+		resultType="_int">
+		select count(1) from ssd_user where userid=#{userid}
+	</select>
+
+	<insert id="user_Quick_register" parameterType="ssd_user">
+		INSERT INTO `Suishendi`.`ssd_user`
+		(`userid`,
+		`username`,
+		`password`,
+		`address1`,
+		`phone`,
+		`telephone`,
+		`createdate`,
+		`lastlogindate`,
+		`lastmodifydate`,
+		`identity_card`,
+		`icon`,
+		`sex`,
+		`birthday`,
+		`email`,
+		`usertype`,
+		`rank`,
+		`integral`,
+		`allergy_his`,
+		`address2`)
+		VALUES
+		(#{userid},
+		#{username },
+		#{password},
+		#{address1},
+		#{phone},
+		#{telephone},
+		#{createdate},
+		#{lastlogindate},
+		#{lastmodifydate},
+		#{identity_card},
+		#{icon},
+		#{sex},
+		#{birthday},
+		#{email},
+		#{usertype},
+		#{rank},
+		#{integral},
+		#{allergy_his },
+		#{address2})
+
+	</insert>
+
+
+</mapper>

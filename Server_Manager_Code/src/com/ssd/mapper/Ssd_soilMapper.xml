@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssd.mapper.Ssd_soilMapper">
+
+	<parameterMap type="java.util.Map" id="testParameterMap"> 
+		<parameter property="statea" jdbcType="INTEGER"  mode="IN" />
+		<parameter property="complete_datea" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="order_ida"  jdbcType="VARCHAR" mode="IN" />
+	</parameterMap>
+	<!--查询单个土地 -->
+	<select id="getSoil" parameterType="ssd_soil" resultType="ssd_soil">
+		select * from ssd_soil
+		<where>
+			<if test="soil_id!=null">
+				and soil_id=#{soil_id}
+			</if>
+		</where>
+	</select>
+
+	<!-- 增加一个土地 -->
+	<insert id="SaveSoil" parameterType="ssd_soil">
+		insert into ssd_soil
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="soil_id !=null and soil_id !=''">
+				soil_id,
+			</if>
+			<if test="soil_title !=null and soil_title !=''">
+				soil_title,
+			</if>
+			<if test="soil_type !=null">
+				soil_type,
+			</if>
+			<if test="soil_area!=null ">
+				soil_area,
+			</if>
+			<if test="soil_remain!=null">
+				soil_remain,
+			</if>
+			<if test="soil_state !=null ">
+				soil_state,
+			</if>
+			<if test="soil_publish_date !=null and soil_publish_date !=''">
+				soil_publish_date,
+			</if>
+			<if test="soil_expires !=null ">
+				soil_expires,
+			</if>
+			<if test="soil_price !=null ">
+				soil_price,
+			</if>
+
+			<if test="soil_province !=null and soil_province !=''">
+				soil_province,
+			</if>
+			<if test="soil_urban_area !=null and soil_urban_area !=''">
+				soil_urban_area,
+			</if>
+			<if test="soil_detailed_address !=null and soil_detailed_address !=''">
+				soil_detailed_address,
+			</if>
+			<if test="soil_phone !=null and soil_phone !=''">
+				soil_phone,
+			</if>
+			<if test="soil_description !=null and soil_description !=''">
+				soil_description,
+			</if>
+			<if test="soil_property !=null">
+				soil_property,
+			</if>
+			<if test="soil_water_state !=null">
+				soil_water_state,
+			</if>
+			<if test="soil_traffic !=null">
+				soil_traffic,
+			</if>
+			<if test="soil_life_mating !=null">
+				soil_life_mating,
+			</if>
+			<if test="soil_surrounding !=null">
+				soil_surrounding,
+			</if>
+			<if test="soil_ad_url !=null">
+				soil_ad_url,
+			</if>
+			<if test="soil_detail_url !=null">
+				soil_detail_url,
+			</if>
+			<if test="soil_report !=null">
+				soil_report,
+			</if>
+			<if test="soil_water_report !=null">
+				soil_water_report,
+			</if>
+			<if test="soil_type_report !=null">
+				soil_type_report,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="soil_id !=null and soil_id !=''">
+				#{soil_id},
+			</if>
+			<if test="soil_title !=null and soil_title !=''">
+				#{soil_title},
+			</if>
+			<if test="soil_type !=null">
+				#{soil_type},
+			</if>
+			<if test="soil_area!=null ">
+				#{soil_area},
+			</if>
+			<if test="soil_remain!=null">
+				#{soil_remain},
+			</if>
+
+			<if test="soil_state !=null ">
+				#{soil_state},
+			</if>
+			<if test="soil_publish_date !=null and soil_publish_date !=''">
+				#{soil_publish_date},
+			</if>
+			<if test="soil_expires !=null ">
+				#{soil_expires},
+			</if>
+			<if test="soil_price !=null ">
+				#{soil_price},
+			</if>
+
+			<if test="soil_province !=null and soil_province !=''">
+				#{soil_province},
+			</if>
+			<if test="soil_urban_area !=null and soil_urban_area !=''">
+				#{soil_urban_area},
+			</if>
+			<if test="soil_detailed_address !=null and soil_detailed_address !=''">
+				#{soil_detailed_address},
+			</if>
+			<if test="soil_phone !=null and soil_phone !=''">
+				#{soil_phone},
+			</if>
+			<if test="soil_description !=null and soil_description !=''">
+				#{soil_description},
+			</if>
+			<if test="soil_property !=null">
+				#{soil_property},
+			</if>
+			<if test="soil_water_state !=null">
+				#{soil_water_state},
+			</if>
+			<if test="soil_traffic !=null">
+				#{soil_traffic},
+			</if>
+			<if test="soil_life_mating !=null">
+				#{soil_life_mating},
+			</if>
+			<if test="soil_surrounding !=null">
+				#{soil_surrounding},
+			</if>
+			<if test="soil_ad_url !=null">
+				#{soil_ad_url},
+			</if>
+			<if test="soil_detail_url !=null">
+				#{soil_detail_url},
+			</if>
+			<if test="soil_report !=null">
+				#{soil_report},
+			</if>
+			<if test="soil_water_report !=null">
+				#{soil_water_report},
+			</if>
+			<if test="soil_type_report !=null">
+				#{soil_type_report},
+			</if>
+
+		</trim>
+	</insert>
+
+	<!-- 查询劝全部土地 -->
+	<select id="findSoil" resultType="ssd_soil">
+		select * from ssd_soil
+	</select>
+
+	<!-- 修改土地信息 -->
+	<update id="UpdateSoil" parameterType="ssd_soil">
+		update ssd_soil
+		<set>
+			<if test="soil_title !=null and soil_title !=''">
+				soil_title=#{soil_title},
+			</if>
+			<if test="soil_type !=null">
+				soil_type=#{soil_type},
+			</if>
+			<if test="soil_area!=null ">
+				soil_area=#{soil_area},
+			</if>
+			<if test="soil_state !=null ">
+				soil_state=#{soil_state},
+			</if>
+			<if test="soil_publish_date !=null and soil_publish_date !=''">
+				soil_publish_date=#{soil_publish_date},
+			</if>
+			<if test="soil_expires !=null ">
+				soil_expires=#{soil_expires},
+			</if>
+			<if test="soil_price !=null ">
+				soil_price=#{soil_price},
+			</if>
+			<if test="soil_update_date!=null">
+				soil_update_date=#{soil_update_date},
+			</if>
+			<if test="soil_province !=null and soil_province !=''">
+				soil_province=#{soil_province},
+			</if>
+			<if test="soil_urban_area !=null and soil_urban_area !=''">
+				soil_urban_area=#{soil_urban_area},
+			</if>
+			<if test="soil_detailed_address !=null and soil_detailed_address !=''">
+				soil_detailed_address=#{soil_detailed_address},
+			</if>
+			<if test="soil_phone !=null and soil_phone !=''">
+				soil_phone=#{soil_phone},
+			</if>
+			<if test="soil_description !=null and soil_description !=''">
+				soil_description=#{soil_description},
+			</if>
+			<if test="soil_property !=null">
+				soil_property=#{soil_property},
+			</if>
+			<if test="soil_water_state !=null">
+				soil_water_state=#{soil_water_state},
+			</if>
+			<if test="soil_traffic !=null">
+				soil_traffic=#{soil_traffic},
+			</if>
+			<if test="soil_life_mating !=null">
+				soil_life_mating=#{soil_life_mating},
+			</if>
+			<if test="soil_surrounding !=null">
+				soil_surrounding=#{soil_surrounding},
+			</if>
+			<if test="soil_ad_url !=null">
+				soil_ad_url=#{soil_ad_url},
+			</if>
+			<if test="soil_detail_url !=null">
+				soil_detail_url= #{soil_detail_url},
+			</if>
+			<if test="soil_report !=null">
+				soil_report=#{soil_report},
+			</if>
+			<if test="soil_water_report !=null">
+				soil_water_report= #{soil_water_report},
+			</if>
+			<if test="soil_type_report !=null">
+				soil_type_report=#{soil_type_report},
+			</if>
+			<if test="soil_remain!=null">
+				soil_remain=#{soil_remain},
+			</if>
+
+		</set>
+		where soil_id=#{soil_id}
+
+	</update>
+
+	<!-- 删除土地 -->
+	<delete id="DeleteSoil" parameterType="ssd_soil">
+		delete from ssd_soil
+		<where>
+			and soil_id=#{soil_id}
+		</where>
+	</delete>
+
+	<!--查总记录数 -->
+	<select id="count" parameterType="ssd_soil" resultType="int">
+		select count(1) from ssd_soil
+
+		<where>
+			<if test="soil_state !=null">
+				and soil_state=#{soil_state}
+			</if>
+			<if test="soil_province !=null ">
+				and soil_province=#{soil_province}
+			</if>
+			<if test="soil_urban_area !=null">
+				and soil_urban_area=#{soil_urban_area}
+			</if>
+			<if test="price_min!=null">
+				and soil_price &gt;=#{price_min}
+			</if>
+			<if test="price_max !=null ">
+				and soil_price &lt;=#{price_max}
+			</if>
+		</where>
+	</select>
+
+	<!-- 分页查询 -->
+	<!-- 分页查询 -->
+	<select id="findpaging" parameterType="ssd_soil" resultType="ssd_soil">
+		<bind name="pageindexs" value="(current_page-1)*count" />
+		select * from ssd_soil
+		<where>
+			<if test="soil_state !=null">
+				and soil_state=#{soil_state}
+			</if>
+			<if test="soil_province !=null ">
+				and soil_province=#{soil_province}
+			</if>
+			<if test="soil_urban_area !=null">
+				and soil_urban_area=#{soil_urban_area}
+			</if>
+			<if test="price_min!=null or price_max!=null">
+				<choose>
+					<when test="price_min!=null and price_max!=null">
+						and soil_price BETWEEN ${price_min} AND
+						${price_max}
+					</when>
+					<when test="price_min!=null and price_max==null">
+						and soil_price &gt;=#{price_min}
+					</when>
+					<otherwise>
+						and soil_price &lt;=#{price_max}
+					</otherwise>
+				</choose>
+			</if>
+			<!-- <if test="price_min!=null"> </if> <if test="price_max !=null "> and 
+				soil_price &lt;=#{price_max} </if> -->
+		</where>
+		order by soil_id desc
+		limit #{pageindexs},#{count}
+	</select>
+
+
+	<!-- 调用存储过程 IN soil_remain float,IN soil_update_date varchar(30),IN soil_id 
+		varchar(30) ,IN state int , IN complete_date varchar(20) ,IN order_id varchar(30)) -->
+	<update id="Update_Tradelog_And_Soil" statementType="CALLABLE"
+		parameterMap="testParameterMap">
+		<!-- {CALL update_tradelogAndSoil( #{soil_remain,mode=IN,JdbcType=FLOAT}, 
+			#{soil_update_date,mode=IN,JdbcType=VARCHAR}, #{soil_id,mode=IN,JdbcType=VARCHAR}, 
+			#{state,mode=IN,JdbcType=INTEGER}, #{complete_date,mode=IN,JdbcType=VARCHAR}, 
+			#{order_id,mode=IN,JdbcType=VARCHAR} ) } -->
+		{CALL update_tradelogAndSoil(
+		 ?, ?, ? ) }
+	</update>
+
+
+</mapper>

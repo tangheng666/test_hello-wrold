@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssd.mapper.Ssd_oplogMapper">
+	<!--日志表的sql操作 -->
+
+	<!--添加一条日志记录 -->
+	<insert id="add_oplog" parameterType="ssd_oplog">
+		INSERT INTO `Suishendi`.`ssd_oplog`
+		(`op_id`,
+		`sys_id`,
+		`user_id`,
+		`username`,
+		`type`,
+		`old_value`,
+		`new_value`)
+		VALUES
+		(#{op_id},#{sys_id},#{user_id},#{username},#{type},#{old_value},#{new_value} )
+	</insert>
+
+</mapper>

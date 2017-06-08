@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context-4.3.xsd
+            http://www.springframework.org/schema/aop 
+            http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+            http://www.springframework.org/schema/tx 
+            http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+            http://www.springframework.org/schema/mvc 
+            http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+            ">
+
+	<!-- 加载配置文件 -->
+
+	<context:component-scan base-package="com.ssd">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<context:property-placeholder location="classpath:db.properties" />
+	<!-- 数据库连接池 -->
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close"> <property name="driverClassName" value="${jdbc.driver}" 
+		/> <property name="url" value="${}" /> <property name="username" value="${jdbc.username}" 
+		/> <property name="password" value="${jdbc.password}" /> <property name="maxActive" 
+		value="10" /> <property name="maxIdle" value="5" /> </bean> -->
+
+	<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"> 
+		用户名 <property name="user" value="${usernamea}" /> 用户密码 <property name="password" 
+		value="${password}" /> <property name="driverClass" value="${driverClassName}" 
+		/> <property name="jdbcUrl" value="${url}" /> 连接池中保留的最大连接数。默认值: 15 <property 
+		name="maxPoolSize" value="100" /> 连接池中保留的最小连接数，默认为：3 <property name="minPoolSize" 
+		value="10" /> 初始化连接池中的连接数，取值应在minPoolSize与maxPoolSize之间，默认为3 <property name="initialPoolSize" 
+		value="5" /> 最大空闲时间，60秒内未使用则连接被丢弃。若为0则永不丢弃。默认值: 0 <property name="maxIdleTime" 
+		value="60"></property> 当连接池连接耗尽时，客户端调用getConnection()后等待获取新连接的时间，超时后将抛出SQLException，如设为0则无限期等待。单位毫秒。默认: 
+		0 <property name="checkoutTimeout" value="3000" /> 当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。默认值: 
+		3 <property name="acquireIncrement" value="10" /> 定义在从数据库获取新连接失败后重复尝试的次数。默认值: 
+		30 ；小于等于0表示无限次 <property name="acquireRetryAttempts" value="10" /> 重新尝试的时间间隔，默认为：1000毫秒 
+		<property name="acquireRetryDelay" value="1000" /> </bean> -->
+<!-- 	阿里 druid 数据库连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+	<!-- 	数据库基本信息配置 -->
+		<property name="url" value="${url}" />
+		<property name="username" value="${usernamea}" />
+		<property name="password" value="${password}" />
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="filters" value="${filters}" />
+	<!-- 	最大并发连接数 -->
+		<property name="maxActive" value="${maxActive}" />
+	<!-- 	初始化连接数量 -->
+		<property name="initialSize" value="${initialSize}" />
+	<!-- 	配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${maxWait}" />
+		<!-- 最小空闲连接数 -->
+		<property name="minIdle" value="${minIdle}" />
+	<!-- 	配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+	<!-- 	配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements}" />
+	<!-- 	打开 removeAbandoned 功能 -->
+		<property name="removeAbandoned" value="${removeAbandoned}" />
+		<!-- 1800 秒，也就是 30 分钟 -->
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+	<!-- 	关闭 abanded 连接时输出错误日志 -->
+		<property name="logAbandoned" value="${logAbandoned}" />
+		<property name="defaultAutoCommit" value="false"></property>
+	</bean>
+
+	<!-- SqlsessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- mybatis配置文件 -->
+		<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml" />
+	</bean>
+
+
+	<!-- MapperScannerConfigurer：mapper的扫描器，将包下边的mapper接口自动创建代理对象， 自动创建到spring容器中，bean的id是mapper的类名（首字母小写） -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 配置扫描包的路径 如果要扫描多个包，中间使用半角逗号分隔 要求mapper.xml和mapper.java同名且在同一个目录 -->
+		<property name="basePackage" value="com.ssd.mapper" />
+		<!-- 使用sqlSessionFactoryBeanName -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+
+
+	</bean>
+
+</beans>
